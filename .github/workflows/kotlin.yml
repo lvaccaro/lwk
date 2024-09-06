@@ -69,8 +69,8 @@ jobs:
       - name: Set env
         run: | 
           echo "RELEASE_REF=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV |
-          echo "RELEASE_VERSION=$(echo $RELEASE_VERSION | sed 's/bindings_//'" >> $GITHUB_ENV
-          echo ${{ env.RELEASE_VERSION }}
+          echo "RELEASE_VERSION=$(echo $RELEASE_VERSION | sed 's/bindings_//'" >> $GITHUB_ENV |
+          echo "${{ env.RELEASE_VERSION }}"
 
       - name: Publish artifacts
         env:
