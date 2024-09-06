@@ -82,9 +82,10 @@ jobs:
       - name: echo env
         run: echo "${{ env.RELEASE_VERSION }}"
 
+      - name: set permissions
+        run: chmod +x ./gradlew 
+
       - name: Publish artifacts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          chmod +x ./gradlew |
-          ./gradlew publish -PlibraryVersion=${{ env.RELEASE_VERSION }}
+        run: ./gradlew publish -PlibraryVersion=${{ env.RELEASE_VERSION }}
