@@ -3,7 +3,7 @@ on:
     branches:
       - master
     tags:
-      - '*'
+      - 'bindings_*'
   pull_request: {}
 
 name: Build & Publish framework for Kotlin library
@@ -63,9 +63,17 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: lwk-artifact
+      - name: ls
+        run: ls -l
+
+      - name: Set env
+        run: | 
+          echo "RELEASE_REF=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV |
+          echo "RELEASE_VERSION=$(echo $RELEASE_VERSION | sed 's/bindings_//'" >> $GITHUB_ENV
+          echo ${{ env.RELEASE_VERSION }}
 
       - name: Publish artifacts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          ./gradlew publish -PlibraryVersion=${{ inputs.package-version }}
+          ./gradlew publish -PlibraryVersion=${{ env.RELEASE_VERSION }}
