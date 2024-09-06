@@ -55,7 +55,7 @@ jobs:
 
   publish:
     runs-on: ubuntu-20.04
-    needs: build
+    #needs: build
     if: startsWith(github.ref, 'refs/tags/bindings_')
     steps:
 
@@ -63,14 +63,24 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: lwk-artifact
+
+      - name: "Set up JDK"
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
       - name: ls
         run: ls -l
 
       - name: Set env
-        run: | 
-          echo "RELEASE_REF=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV |
-          echo "RELEASE_VERSION=$(echo ${{ env.RELEASE_REF }} | sed 's/bindings_//'" >> $GITHUB_ENV |
-          echo "${{ env.RELEASE_VERSION }}"
+        run: echo "RELEASE_REF=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+      - name: Set env1
+        run: echo "RELEASE_VERSION=$(echo ${{ env.RELEASE_REF }} | sed 's/bindings_//'" >> $GITHUB_ENV |
+
+      - name: echo env
+        run: echo "${{ env.RELEASE_VERSION }}"
 
       - name: Publish artifacts
         env:
